@@ -1,0 +1,7 @@
+{
+  "name": "logic-ci",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "node test/math.test.js && node test/string.test.js"
+  }
+}
