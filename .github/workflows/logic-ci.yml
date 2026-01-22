@@ -4,7 +4,8 @@ on:
   push:
     paths:
       - "logic-ci/**"
-    pull_request:
+  pull_request:
+    paths:
       - "logic-ci/**"
 
 jobs:
