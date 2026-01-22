@@ -1,0 +1,7 @@
+{
+  "name": "ci-frontend",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "node test/app.test.js"
+  }
+}
