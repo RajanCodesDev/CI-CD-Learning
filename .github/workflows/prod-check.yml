@@ -1,0 +1,67 @@
+name: Production Validation
+
+on: [push]
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: authdb
+          MYSQL_USER: authuser
+          MYSQL_PASSWORD: strongpassword
+        ports:
+          - 3306:3306
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Start app
+        env:
+          DB_HOST: 127.0.0.1
+          DB_USER: authuser
+          DB_PASS: strongpassword
+          DB_NAME: authdb
+          JWT_SECRET: prodsecret
+          PORT: 3000
+        run: |
+          node src/server.js &
+          echo $! > app.pid
+
+      - name: Wait for app
+        run: |
+          for i in {1..20}; do
+            nc -z 127.0.0.1 3000 && exit 0
+            sleep 1
+          done
+          echo "App did not start"
+          exit 1
+
+      - name: Test register
+        run: |
+          curl -f -X POST http://localhost:3000/auth/register \
+            -H "Content-Type: application/json" \
+            -d '{"username":"ciuser","password":"1234"}'
+
+      - name: Test login
+        run: |
+          curl -f -X POST http://localhost:3000/auth/login \
+            -H "Content-Type: application/json" \
+            -d '{"username":"ciuser","password":"1234"}'
+
+      - name: Stop app
+        if: always()
+        run: |
+          kill $(cat app.pid)
