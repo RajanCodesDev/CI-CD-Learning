@@ -26,6 +26,7 @@ jobs:
           node-version: 20
 
       - name: Install deps
+        working-directory: simple-nodeapp
         run: npm install
 
       - name: Start app
