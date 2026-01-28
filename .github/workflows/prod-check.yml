@@ -30,6 +30,7 @@ jobs:
         run: npm install
 
       - name: Start app
+        working-directory: simple-nodeapp
         env:
           DB_HOST: 127.0.0.1
           DB_USER: authuser
