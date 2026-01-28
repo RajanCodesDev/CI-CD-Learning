@@ -17,7 +17,7 @@ jobs:
         ports:
           - 3306:3306
         volumes:
-          - ${{github.workspace}}/infra/simple-nodeapp/mysql:/docker-entrypoint-initdb.d
+          - ${{github.workspace}}/infra/simple-nodeapp/mysql:/docker-entrypoint-initdb.d:ro
 
 
     steps:
