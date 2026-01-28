@@ -55,7 +55,7 @@ jobs:
         run: |
           curl -f -X POST http://localhost:3000/auth/register \
             -H "Content-Type: application/json" \
-            -d '{"username":"ciuser","password":"1234"}'
+            -d '{"username":"ciuser1","password":"12341"}'
 
       - name: Test login
         run: |
