@@ -53,13 +53,13 @@ jobs:
 
       - name: Test register
         run: |
-          curl -f -X POST http://localhost:3000/auth/register \
+          curl -v -X POST http://localhost:3000/auth/register \
             -H "Content-Type: application/json" \
             -d '{"username":"ciuser1","password":"12341"}'
 
       - name: Test login
         run: |
-          curl -f -X POST http://localhost:3000/auth/login \
+          curl -v -X POST http://localhost:3000/auth/login \
             -H "Content-Type: application/json" \
             -d '{"username":"ciuser","password":"1234"}'
 
