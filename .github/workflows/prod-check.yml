@@ -16,9 +16,7 @@ jobs:
           MYSQL_PASSWORD: strongpassword
         ports:
           - 3306:3306
-        volumes:
-        - ${{ github.workspace }}/repo/infra/simple-nodeapp/mysql:/docker-entrypoint-initdb.d:ro
-
+          
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,6 +30,17 @@ jobs:
       - name: Install deps
         working-directory: repo/simple-nodeapp
         run: npm install
+
+      - name: Initialize DB schema
+        run: |
+            mysql -h 127.0.0.1 -u authuser -pstrongpassword authdb <<'EOF'
+            CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(50) UNIQUE NOT NULL,
+            password_hash VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            EOF
 
       - name: wait for mysql to start
         run: |
