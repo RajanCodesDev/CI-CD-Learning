@@ -16,6 +16,9 @@ jobs:
           MYSQL_PASSWORD: strongpassword
         ports:
           - 3306:3306
+        volumes:
+          - ${{github.workspace}}/infra/simple-nodeapp/mysql:/docker-entrypoint-initdb.d
+
 
     steps:
       - uses: actions/checkout@v4
