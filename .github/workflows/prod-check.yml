@@ -21,7 +21,13 @@ jobs:
 
 
     steps:
+      - name: Fix workspace permissions
+        run: |
+            sudo chown -R runner:runner $GITHUB_WORKSPACE
+            
       - uses: actions/checkout@v4
+        with:
+            clean: false
 
       - name: Setup Node
         uses: actions/setup-node@v4
