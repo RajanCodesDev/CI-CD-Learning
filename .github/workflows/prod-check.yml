@@ -26,7 +26,7 @@ jobs:
           node-version: 20
 
       - name: Install deps
-        run: npm ci
+        run: npm install
 
       - name: Start app
         env:
@@ -37,7 +37,7 @@ jobs:
           JWT_SECRET: prodsecret
           PORT: 3000
         run: |
-          node src/server.js &
+          npm start &
           echo $! > app.pid
 
       - name: Wait for app
@@ -64,4 +64,9 @@ jobs:
       - name: Stop app
         if: always()
         run: |
-          kill $(cat app.pid)
+            if [ -f app.pid ]; then
+            kill $(cat app.pid)
+            else
+            echo "App never started, nothing to stop"
+            fi
+
