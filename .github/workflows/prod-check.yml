@@ -54,7 +54,7 @@ jobs:
 
 
       - name: Start app
-        working-directory: repo/simple-nodeapp
+        working-directory: simple-nodeapp
         env:
           DB_HOST: 127.0.0.1
           DB_USER: authuser
