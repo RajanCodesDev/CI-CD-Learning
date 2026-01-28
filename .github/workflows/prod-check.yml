@@ -17,16 +17,12 @@ jobs:
         ports:
           - 3306:3306
         volumes:
-        - ${{ github.workspace }}/infra/simple-nodeapp/mysql:/docker-entrypoint-initdb.d:ro
+        - ${{ github.workspace }}/repo/infra/simple-nodeapp/mysql:/docker-entrypoint-initdb.d:ro
 
     steps:
       - uses: actions/checkout@v4
-        # with:
-        #     clean: false
-        
-      - name: Fix workspace permissions
-        run: |
-            sudo chown -R runner:runner $GITHUB_WORKSPACE
+        with:
+            path: repo
                 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -34,7 +30,7 @@ jobs:
           node-version: 20
 
       - name: Install deps
-        working-directory: simple-nodeapp
+        working-directory: repo/simple-nodeapp
         run: npm install
 
       - name: wait for mysql to start
@@ -48,7 +44,7 @@ jobs:
 
 
       - name: Start app
-        working-directory: simple-nodeapp
+        working-directory: repo/simple-nodeapp
         env:
           DB_HOST: 127.0.0.1
           DB_USER: authuser
@@ -71,15 +67,15 @@ jobs:
 
       - name: Test register
         run: |
-          curl -v -X POST http://localhost:3000/auth/register \
+          curl -vf -X POST http://localhost:3000/auth/register \
             -H "Content-Type: application/json" \
             -d '{"username":"ciuser1","password":"12341"}'
 
       - name: Test login
         run: |
-          curl -v -X POST http://localhost:3000/auth/login \
+          curl -vf -X POST http://localhost:3000/auth/login \
             -H "Content-Type: application/json" \
-            -d '{"username":"ciuser","password":"1234"}'
+            -d '{"username":"ciuser1","password":"12341"}'
 
       - name: Stop app
         if: always()
