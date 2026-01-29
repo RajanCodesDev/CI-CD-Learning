@@ -1,4 +1,4 @@
-name : logic-CI
+name: logic-CI
 
 on:
   push:
